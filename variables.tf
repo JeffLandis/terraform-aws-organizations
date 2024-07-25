@@ -1,20 +1,14 @@
-
-variable "feature_set" {
-  description = "(Optional) Specify 'ALL' (default) or 'CONSOLIDATED_BILLING'."
-  type        = string
-  default     = "ALL"
-}
-
-variable "aws_service_access_principals" {
-  description = "(Optional) List of AWS service principal names for which you want to enable integration with your organization."
-  type        = list(string)
-  default     = []
-}
-
-variable "enabled_policy_types" {
-  description = "(Optional) List of Organizations policy types to enable in the Organization Root."
-  type        = list(string)
-  default     = []
+variable "organization" {
+  description = "Create an organization."
+  type        = object({
+    # feature_set (Optional) Specify 'ALL' (default) or 'CONSOLIDATED_BILLING'.
+    feature_set = optional(string, "ALL")
+    # aws_service_access_principals (Optional) List of AWS service principal names for which you want to enable integration with your organization.
+    aws_service_access_principals = optional(list(string), [])
+    # enabled_policy_types (Optional) List of Organizations policy types to enable in the Organization Root.
+    enabled_policy_types = optional(list(string), [])
+  })
+  default = {}
 }
 
 # path-like string of parent ou names ending with the ou's name

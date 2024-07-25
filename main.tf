@@ -21,9 +21,9 @@ locals {
 }
 
 resource "aws_organizations_organization" "this" {
-  feature_set = var.feature_set
-  aws_service_access_principals = var.aws_service_access_principals
-  enabled_policy_types = var.enabled_policy_types
+  feature_set = var.organization.feature_set
+  aws_service_access_principals = var.organization.aws_service_access_principals
+  enabled_policy_types = var.organization.enabled_policy_types
 
   # other aws services may change 'aws_service_access_principals' so ignore those changes
   lifecycle {
