@@ -18,6 +18,9 @@ locals {
       aws_organizations_organizational_unit.index_4,
       aws_organizations_organizational_unit.index_5
   )
+
+  accounts = { for v in var.accounts: v.name => v }
+
 }
 
 resource "aws_organizations_organization" "this" {
@@ -74,7 +77,7 @@ resource "aws_organizations_organizational_unit" "index_5" {
 }
 
 resource "aws_organizations_account" "this" {
-  for_each = { for v in var.accounts: v.name => v }
+  for_each = local.accounts
   name  = each.value.name
   email = each.value.email
   role_name = each.value.role_name
@@ -91,8 +94,8 @@ resource "aws_organizations_account" "this" {
 }
 
 resource "aws_vpc_ipam_organization_admin_account" "this" {
-  count = var.ipam_delegated_admin_account_id == null ? 0 : 1
-  delegated_admin_account_id = var.ipam_delegated_admin_account_id
+  count = alltrue([var.ipam_delegated_admin_account.id == null, var.ipam_delegated_admin_account.name == null]) ? 0 : 1
+  delegated_admin_account_id = coalesce(var.ipam_delegated_admin_account.id, try(aws_organizations_account.this[var.ipam_delegated_admin_account.name].id, null))
 }
 
 resource "aws_ram_sharing_with_organization" "this" {

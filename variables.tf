@@ -63,9 +63,12 @@ variable "account_tags" {
   default     = {}
 }
 
-variable "ipam_delegated_admin_account_id" {
-  description = "Enables the IPAM Service and promotes a delegated administrator account."
-  type        = string
+variable "ipam_delegated_admin_account" {
+  description = "Enables the IPAM Service and promotes a delegated administrator account. Either account id or name is required."
+  type        = object({
+    id = optional(string, null)
+    name = optional(string, null)
+  })
   default     = null
 }
 

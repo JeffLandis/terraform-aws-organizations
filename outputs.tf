@@ -7,7 +7,7 @@ output "organizational_units" {
 }
 
 output "accounts" {
-    value = aws_organizations_account.this
+    value = { for k,v in aws_organizations_account.this: k=>merge(v, {role_name = local.accounts[k].role_name}) }
 }
 
 output "ipam_organization_admin_account" {
